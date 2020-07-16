@@ -2,21 +2,25 @@ extern crate soup;
 extern crate url;
 
 use soup::*;
-use std::collections::LinkedList;
 use std::vec::*;
 use url::*;
-use std::convert::TryInto;
+use std::collections::LinkedList;
 
 
-pub(crate) struct page{
-    pub(crate) last_linker:String,
-    pub(crate) title:String,
-    pub(crate) about:String,
-    pub(crate) body: Soup,
-    pub(crate) hits: i8,
+pub struct page{
+    last_linker:String,
+    title:String,
+    about:String,
+    body: Soup,
 }
 
-pub(crate) fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
+impl page {
+    fn page(self){
+
+    }
+}
+
+pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
     let mut links=Vec::new();
     let all_links= soup.tag("a").find_all();
 
@@ -39,13 +43,12 @@ pub(crate) fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
     }
     return links;
 }
-pub(crate) fn soup_page_formater(page:&Soup, last_page:String) ->page{
+pub fn soup_page_formater(page:&Soup, last_page:String) ->page{
     let mut current_page = page{
         last_linker: "".to_string(),
         title: "".to_string(),
         about: "".to_string(),
-        body: Soup::new(""),
-        hits: 0
+        body: Soup::new("")
     };
 
     let title=page.tag("title").find().unwrap().text();
@@ -66,9 +69,14 @@ pub(crate) fn soup_page_formater(page:&Soup, last_page:String) ->page{
     return current_page;
 
 }
+pub fn display_links(links:LinkedList<String>){
+    for page in links{
+        println!("{}",page);
+    }
+}
 
 
-pub(crate) fn print_page_info(page:page){
+fn print_page_info(page:page){
     println!("=====");
     println!("title:{}",page.title);
     println!("about:{}",page.about);
