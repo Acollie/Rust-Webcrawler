@@ -10,7 +10,6 @@ mod web_page_format;
 mod fetch;
 mod file_mangament;
 
-use soup::*;
 use std::collections::LinkedList;
 use std::borrow::Borrow;
 

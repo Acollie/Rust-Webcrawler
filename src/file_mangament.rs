@@ -9,7 +9,7 @@ use std::collections::LinkedList;
 use crate::web_page_format::Page;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-struct Sweep_info{
+struct SweepInfo {
     date:i64,
     sites: LinkedList<Page>
 }
@@ -23,7 +23,7 @@ pub fn save_file_sweep(sites:LinkedList<Page>){
         }
         _ => {panic!(1)}
     }
-    let sweep=Sweep_info{
+    let sweep= SweepInfo {
         date: epoch_time,
         sites: sites
     };
