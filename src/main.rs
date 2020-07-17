@@ -8,7 +8,7 @@ extern crate regex;
 
 mod web_page_format;
 mod fetch;
-mod file_mangament;
+mod file_management;
 
 use std::collections::LinkedList;
 use std::borrow::Borrow;
@@ -33,13 +33,13 @@ fn search_space(first_item:&String,depth:i32 ){
             if !visited_nodes.contains(link.clone().borrow()){
                 visited_nodes.push_back(link.clone());
             }
-            nodes.push_back(web_page_format::soup_page_formater(&page,last_node,link.clone().to_string()));
+            nodes.push_back(web_page_format::soup_page_formatter(&page, last_node, link.clone().to_string()));
 
             last_node=link;
         }
 
         if counter == depth {
-            file_mangament::save_file_sweep(nodes);
+            file_management::save_file_sweep(nodes);
             break
 
         }
@@ -52,6 +52,6 @@ fn search_space(first_item:&String,depth:i32 ){
 
 fn main() {
     search_space(&"https://www.bbc.co.uk".to_string(),1);
-    // file_mangament::save_file_sweep();
+    // file_management::save_file_sweep();
 
 }
