@@ -4,7 +4,6 @@ extern crate url;
 use soup::*;
 use std::vec::*;
 use url::*;
-use std::collections::LinkedList;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Page {
@@ -12,12 +11,6 @@ pub struct Page {
     title:String,
     about:String,
     url:String,
-}
-
-impl Page {
-    fn page(self){
-
-    }
 }
 
 pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
@@ -43,7 +36,8 @@ pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
     }
     return links;
 }
-pub fn soup_page_formater(page:&Soup, last_page:String,page_url:String) -> Page {
+//soup_page_formatter
+pub fn soup_page_formatter(page:&Soup, last_page:String, page_url:String) -> Page {
     let mut current_page = Page {
         last_linker: "".to_string(),
         title: "".to_string(),
@@ -69,17 +63,62 @@ pub fn soup_page_formater(page:&Soup, last_page:String,page_url:String) -> Page 
     return current_page;
 
 }
-pub fn display_links(links:LinkedList<String>){
-    for page in links{
-        println!("{}",page);
+
+//Test
+#[cfg(test)]
+mod test{
+    use crate::web_page_format::{soup_page_formatter, soup_to_links};
+    use soup::Soup;
+
+    #[test]
+    fn test_soup_page_formatter(){
+        let html=r#"
+        <html><head><title>The Dormouse's story</title></head>
+        <body>
+        <p class="title"><b>The Dormouse's story</b></p>
+        <h1>The Dormouse's story</h1>
+        <p class="story">Once upon a time there were three little sisters; and their names were
+        <a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
+        <a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
+        <a href="http://example.com/tillie" class="sister" id="link3">Tillie</a>;
+        and they lived at the bottom of a well.</p>
+
+        <p class="story">...</p>
+        "#;
+        let soup= Soup::new(html);
+        let page= soup_page_formatter(&soup,"test.com".to_string(),"Test title".to_string());
+        assert_eq!(page.last_linker,"test.com");
+        assert_eq!(page.title,"The Dormouse's story");
+        assert_eq!(page.about.contains("The Dormouse's story"),true);
+        assert_eq!(page.about.contains("This does not appear"),false);
+
     }
-}
+    #[test]
+    fn test_soup_to_links(){
+        let html=r#"
+        <html><head><title>The Dormouse's story</title></head>
+        <body>
+        <p class="title"><b>The Dormouse's story</b></p>
+        <h1>The Dormouse's story</h1>
+        <p class="story">Once upon a time there were three little sisters; and their names were
+        <a href="/news" class="sister" id="link1">Elsie</a>,
 
+        <a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
+        <a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
+        <a href="http://example.com/tillie" class="sister" id="link3">Tillie</a>;
+        and they lived at the bottom of a well.</p>
 
-fn print_page_info(page: Page){
-    println!("=====");
-    println!("title:{}",page.title);
-    println!("about:{}",page.about);
-    println!("last_linker:{}",page.last_linker);
-    println!("=====");
+        <p class="story">...</p>
+        "#;
+        let soup=Soup::new(html);
+        let links=soup_to_links(&soup, &"http://example.com".to_string());
+        assert_eq!(links.contains(&"http://example.com/elsie".to_string()),true);
+        assert_eq!(links.contains(&"http://example.com/news".to_string()),true);
+        assert_eq!(links.contains(&"/news".to_string()),false);
+
+        for link in links{
+            assert_eq!(link.contains("http"),true)
+        }
+
+    }
 }
