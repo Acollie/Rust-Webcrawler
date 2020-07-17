@@ -10,6 +10,7 @@ use std::ops::Add;
 use std::borrow::Borrow;
 use std::collections::LinkedList;
 
+use crate::web_page_format::Page;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct Sweep_info{
@@ -30,11 +31,12 @@ pub fn save_file_sweep(sites:LinkedList<Page>){
         date: epoch_time,
         sites: sites
     };
+    let format_sweep = serde_yaml::to_string(&sweep).unwrap();
 
     let mut file=File::create("sites.yaml");
     match file {
         Ok(mut file)=>{
-            file.write_all(sweep.as_bytes());
+            file.write_all(format_sweep.as_bytes());
         }
         _ => {}
     }

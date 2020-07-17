@@ -6,15 +6,15 @@ use std::vec::*;
 use url::*;
 use std::collections::LinkedList;
 
-
-pub struct page{
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+pub struct Page {
     last_linker:String,
     title:String,
     about:String,
-    body: Soup,
+    url:String,
 }
 
-impl page {
+impl Page {
     fn page(self){
 
     }
@@ -43,12 +43,12 @@ pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
     }
     return links;
 }
-pub fn soup_page_formater(page:&Soup, last_page:String) ->page{
-    let mut current_page = page{
+pub fn soup_page_formater(page:&Soup, last_page:String,page_url:String) -> Page {
+    let mut current_page = Page {
         last_linker: "".to_string(),
         title: "".to_string(),
         about: "".to_string(),
-        body: Soup::new("")
+        url:page_url,
     };
 
     let title=page.tag("title").find().unwrap().text();
@@ -76,7 +76,7 @@ pub fn display_links(links:LinkedList<String>){
 }
 
 
-fn print_page_info(page:page){
+fn print_page_info(page: Page){
     println!("=====");
     println!("title:{}",page.title);
     println!("about:{}",page.about);

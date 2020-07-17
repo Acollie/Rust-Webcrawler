@@ -17,12 +17,12 @@ use regex::*;
 use std::collections::LinkedList;
 use std::borrow::Borrow;
 use std::{thread, time};
-use web_page_format::page;
+use web_page_format::Page;
 use web_page_format::soup_to_links;
 use std::convert::TryInto;
 use std::fs::remove_file;
 
-fn search_space(first_item:&String){
+fn search_space(first_item:&String,depth:u8){
     let mut links_to_explore:Vec<String> = Vec::new();
     let mut visited_nodes:LinkedList<String> = LinkedList::new();
     let mut last_node:String = "START NODE".to_string();
@@ -42,16 +42,13 @@ fn search_space(first_item:&String){
             if !visited_nodes.contains(link.clone().borrow()){
                 visited_nodes.push_back(link.clone());
             }
-            nodes.push_back(web_page_format::soup_page_formater(&page,last_node));
+            nodes.push_back(web_page_format::soup_page_formater(&page,last_node,link.clone().to_string()));
 
             last_node=link;
         }
-        println!("Nodes explored:{}",visited_nodes.len());
-        println!("Nodes  to explore:{}",links_to_explore.len());
-        web_page_format::soup_page_formater(&page, last_node.clone());
-        counter += 1;
-        if counter%3 == 0 {
-            web_page_format::display_links(visited_nodes.clone());
+
+        if counter == 0 {
+            file_mangament::save_file_sweep(nodes);
             break
 
         }
@@ -62,7 +59,7 @@ fn search_space(first_item:&String){
 }
 
 fn main() {
-    // search_space(&"https://www.bbc.co.uk".to_string());
-    file_mangament::open_file();
+    search_space(&"https://www.bbc.co.uk".to_string(),3);
+    // file_mangament::save_file_sweep();
 
 }
