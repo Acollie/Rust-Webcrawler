@@ -4,7 +4,6 @@ extern crate url;
 use soup::*;
 use std::vec::*;
 use url::*;
-use std::collections::LinkedList;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Page {
@@ -12,12 +11,6 @@ pub struct Page {
     title:String,
     about:String,
     url:String,
-}
-
-impl Page {
-    fn page(self){
-
-    }
 }
 
 pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
@@ -69,17 +62,4 @@ pub fn soup_page_formater(page:&Soup, last_page:String,page_url:String) -> Page 
     return current_page;
 
 }
-pub fn display_links(links:LinkedList<String>){
-    for page in links{
-        println!("{}",page);
-    }
-}
 
-
-fn print_page_info(page: Page){
-    println!("=====");
-    println!("title:{}",page.title);
-    println!("about:{}",page.about);
-    println!("last_linker:{}",page.last_linker);
-    println!("=====");
-}

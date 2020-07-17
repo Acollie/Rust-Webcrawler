@@ -3,11 +3,7 @@ extern crate serde_yaml;
 
 use std::time::SystemTime;
 use std::fs::File;
-use std::collections::BTreeMap;
-use crate::main;
 use std::io::Write;
-use std::ops::Add;
-use std::borrow::Borrow;
 use std::collections::LinkedList;
 
 use crate::web_page_format::Page;
@@ -19,7 +15,7 @@ struct Sweep_info{
 }
 pub fn save_file_sweep(sites:LinkedList<Page>){
 
-    File::create("sites.yaml");
+    File::create("sites.yaml").expect("Failed to create file");
     let epoch_time:i64;
     match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
         Ok(time)=>{
@@ -33,10 +29,17 @@ pub fn save_file_sweep(sites:LinkedList<Page>){
     };
     let format_sweep = serde_yaml::to_string(&sweep).unwrap();
 
-    let mut file=File::create("sites.yaml");
+    let file=File::create("sites.yaml");
     match file {
         Ok(mut file)=>{
-            file.write_all(format_sweep.as_bytes());
+            match file.write_all(format_sweep.as_bytes()){
+                Ok(_)=>{
+                    println!("Saved to file");
+                }
+                Err(e)=>{
+                    println!("Error during save ERROR:{}",e);
+                }
+            }
         }
         _ => {}
     }
