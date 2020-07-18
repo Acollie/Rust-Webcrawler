@@ -14,7 +14,6 @@ mod ingestion_engine;
 
 use std::collections::LinkedList;
 use std::borrow::Borrow;
-use soup::Soup;
 
 
 fn search_space(first_item:&String,depth:i32 ){

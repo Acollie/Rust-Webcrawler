@@ -1,14 +1,9 @@
 use soup::{Soup, QueryBuilderExt, NodeExt};
-use std::collections::LinkedList;
-use std::borrow::Borrow;
-
-// From https://en.wikipedia.org/wiki/Most_common_words_in_English
 
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Site{
     pub title:String,
-    pub website_type: website_types,
     pub words:Vec<Word>
 }
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -17,19 +12,13 @@ pub struct Word{
     pub hits:i32,
 }
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub enum website_types{
-    personal_site,
-    shopping,
-    travel,
+pub enum WebsiteTypes{
+    PersonalSite,
+    Shopping,
+    Travel,
 
 }
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
-enum common_locations{
-    h1,
-    h2,
-    body,
-    p
-}
+
 pub fn words_from_soup(soup:&Soup)->Site{
 
 
@@ -37,7 +26,6 @@ pub fn words_from_soup(soup:&Soup)->Site{
 
     let mut site= Site{
         title: soup.tag("title").find().unwrap().text(),
-        website_type: website_types::personal_site,
         words: Default::default()
     };
     for x in body_text{
@@ -64,6 +52,7 @@ pub fn words_from_soup(soup:&Soup)->Site{
     return site;
 }
 
+// From https://en.wikipedia.org/wiki/Most_common_words_in_English
 fn words()->Vec<String>{
     let words:Vec<String> = vec!["the".to_string(),
         "be".to_string().to_uppercase(),
