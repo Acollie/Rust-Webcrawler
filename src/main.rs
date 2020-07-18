@@ -1,6 +1,7 @@
 
-#[macro_use] extern crate serde_derive;
 
+#[macro_use]
+extern crate serde_derive;
 extern crate url;
 extern crate reqwest;
 extern crate soup;
@@ -9,9 +10,11 @@ extern crate regex;
 mod web_page_format;
 mod fetch;
 mod file_management;
+mod ingestion_engine;
 
 use std::collections::LinkedList;
 use std::borrow::Borrow;
+use soup::Soup;
 
 
 fn search_space(first_item:&String,depth:i32 ){
@@ -52,8 +55,14 @@ fn search_space(first_item:&String,depth:i32 ){
 }
 
 fn main() {
-    let settings=file_management::load_config();
-    search_space(&settings.start_site,settings.sweep_depth);
-    // file_management::save_file_sweep();
-
+    // let settings=file_management::load_config();
+    // search_space(&settings.start_site,settings.sweep_depth);
+    let html=r#"
+        <html><head><title>The Dormouse's story</title></head>
+        <h1>How to fix your car</h1>
+        <p>Many things might be useful when trying to fix your car but the most likely is that the car is broken because it has no fuel.</p>
+        </html>
+        "#;
+    let soup=Soup::new(html);
+    ingestion_engine::words_from_soup(soup);
 }
