@@ -55,17 +55,8 @@ fn search_space(first_item:&String,depth:i32 ){
 }
 
 fn main() {
-    // let settings=file_management::load_config();
-    // search_space(&settings.start_site,settings.sweep_depth);
-    let html=r#"
-        <html><head><title>The Dormouse's story</title></head>
-        <h1>How to fix your car</h1>
-        <p>Many things might be useful when trying to fix your car but the most likely is that the car is broken because it has no fuel.</p>
-        </html>
-        "#;
-    let soup=Soup::new(html);
-    let test:ingestion_engine::Site=ingestion_engine::words_from_soup(soup);
-    for x in test.words{
-        println!("word :{}, hits :{}",x.word, x.hits)
-    }
+
+    let settings = file_management::load_config();
+    search_space(&settings.start_site, settings.sweep_depth);
+
 }

@@ -4,6 +4,8 @@ extern crate url;
 use soup::*;
 use std::vec::*;
 use url::*;
+use crate::ingestion_engine::Word;
+use crate::ingestion_engine;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Page {
@@ -11,6 +13,7 @@ pub struct Page {
     title:String,
     about:String,
     url:String,
+    words:Vec<Word>
 }
 
 pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
@@ -38,11 +41,13 @@ pub fn soup_to_links(soup:&Soup,base_url:&String) -> Vec<String> {
 }
 //soup_page_formatter
 pub fn soup_page_formatter(page:&Soup, last_page:String, page_url:String) -> Page {
+
     let mut current_page = Page {
         last_linker: "".to_string(),
         title: "".to_string(),
         about: "".to_string(),
         url:page_url,
+        words: ingestion_engine::words_from_soup(&page).words
     };
 
     let title=page.tag("title").find().unwrap().text();
