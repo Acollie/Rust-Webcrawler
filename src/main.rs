@@ -64,5 +64,8 @@ fn main() {
         </html>
         "#;
     let soup=Soup::new(html);
-    ingestion_engine::words_from_soup(soup);
+    let test:ingestion_engine::Site=ingestion_engine::words_from_soup(soup);
+    for x in test.words{
+        println!("word :{}, hits :{}",x.word, x.hits)
+    }
 }
