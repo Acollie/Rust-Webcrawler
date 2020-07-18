@@ -1,11 +1,14 @@
 extern crate serde_yaml;
+extern crate yaml_rust;
 
 
 use std::time::SystemTime;
 use std::fs::File;
-use std::io::Write;
+use std::fs;
+use std::io::{Write};
 use std::collections::LinkedList;
 
+use yaml_rust::YamlLoader;
 use crate::web_page_format::Page;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -13,6 +16,24 @@ struct SweepInfo {
     date:i64,
     sites: LinkedList<Page>
 }
+
+pub struct Settings{
+    pub start_site:String,
+    pub sweep_depth:i32,
+
+}
+pub fn load_config()->Settings{
+    let file= fs::read_to_string("config.yaml").unwrap();
+    let yaml= YamlLoader::load_from_str(&file).unwrap();
+
+    return Settings{
+        start_site: yaml[0]["start_site"].as_str().unwrap().to_string(),
+        sweep_depth: yaml[0]["sweep_depth"].as_i64().unwrap() as i32
+    }
+
+}
+
+
 pub fn save_file_sweep(sites:LinkedList<Page>){
 
     File::create("sites.yaml").expect("Failed to create file");

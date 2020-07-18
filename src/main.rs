@@ -13,6 +13,7 @@ mod file_management;
 use std::collections::LinkedList;
 use std::borrow::Borrow;
 
+
 fn search_space(first_item:&String,depth:i32 ){
     let mut links_to_explore:Vec<String> = Vec::new();
     let mut visited_nodes:LinkedList<String> = LinkedList::new();
@@ -51,7 +52,8 @@ fn search_space(first_item:&String,depth:i32 ){
 }
 
 fn main() {
-    search_space(&"https://www.bbc.co.uk".to_string(),1);
+    let settings=file_management::load_config();
+    search_space(&settings.start_site,settings.sweep_depth);
     // file_management::save_file_sweep();
 
 }
