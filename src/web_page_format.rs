@@ -56,7 +56,7 @@ pub fn soup_page_formatter(page:&Soup, last_page: String, page_url: &String) -> 
     Page {
         last_linker: last_page,
         title,
-        about:"".to_string(),
+        about: body,
         url: page_url.to_string(),
         words: ingestion_engine::words_from_soup(&page).words
     }
