@@ -40,17 +40,17 @@ pub fn words_from_soup(soup:&Soup)->Site{
                     word: word.clone(),
                     hits: 1
                 };
+                let tmp=word.clone();
+                words.insert(word);
 
                 for test_word in x.text().split(" "){
-                    if word== test_word{
+                     if tmp== test_word{
                         current_word.hits+=1;
                     }
                 }
                 site.words.push(current_word);
-                words.insert(word);
 
             }
-
         }
     }
 
@@ -76,9 +76,11 @@ fn words()->HashSet<String>{
         "the".to_string().to_uppercase(),
         "is".to_string().to_uppercase(),
         "a".to_string().to_uppercase(),
+        "have".to_string().to_uppercase(),
         "in".to_string().to_uppercase(),
         "that".to_string().to_uppercase(),
         "I".to_string().to_uppercase(),
+        "and".to_string().to_uppercase(),
         "it".to_string().to_uppercase(),
         "for".to_string().to_uppercase(),
         "not".to_string().to_uppercase(),
@@ -89,6 +91,10 @@ fn words()->HashSet<String>{
         "but".to_string().to_uppercase(),
         "no".to_string().to_uppercase(),
         "might".to_string().to_uppercase(),
+        "an".to_string().to_uppercase(),
+        "you".to_string().to_uppercase(),
+        "you".to_string().to_uppercase(),
+
     ];
     return HashSet::from_iter(words);
 }
