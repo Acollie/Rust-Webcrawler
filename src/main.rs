@@ -12,50 +12,63 @@ mod fetch;
 mod file_management;
 mod ingestion_engine;
 
-use std::collections::LinkedList;
-use std::borrow::Borrow;
+use std::collections::HashSet;
 
 
-fn search_space(first_item:&String,depth:i32 ){
-    let mut links_to_explore:Vec<String> = Vec::new();
-    let mut visited_nodes:LinkedList<String> = LinkedList::new();
-    let mut last_node:String = "START NODE".to_string();
-    links_to_explore.push(first_item.parse().unwrap());
-    let mut nodes = LinkedList::new();
+// fn search_space_recursive(page_url: &str, last_page: &str, depth: i32, nodes: &mut Vec<Page>, links_done: &mut HashSet<String>) {
+//     let page= fetch::fetch_page(&page_url);
+//     let links= web_page_format::soup_to_links(&page,page_url);
+//
+//     nodes.push(web_page_format::soup_page_formatter(&page, last_page, page_url));
+//     if depth > 0 {
+//         for link in links {
+//             if !links_done.contains(&link){
+//                 links_done.insert(link.clone());
+//                 search_space_recursive(&link, page_url,depth - 1, nodes, links_done);
+//             }
+//         }
+//     }
+// }
+//
+// fn search_space_using_recursion(first_item:String,depth:i32 ){
+//     let mut links_todo=Vec::new();
+//     let mut links_done:HashSet<String>=HashSet::new();
+//     let mut nodes=Vec::new();
+//     search_space_recursive(first_item, String::from("START_NODE"), &mut nodes, &mut links_done);
+//
+//     file_management::save_file_sweep(nodes);
+// }
 
-    let mut counter:i32= 0;
+fn search_space(first_item:String,depth:i32 ){
+    let mut links_todo=Vec::new();
+    let mut links_done:HashSet<String>=HashSet::new();
+    let mut nodes=Vec::new();
+    let mut current_depth = 0;
+    links_todo.push((first_item, String::from("START_NODE")));
 
-    loop {
-        if counter==links_to_explore.len() as i32 {break;}
-        let link = &links_to_explore[counter as usize];
-        let page = fetch::fetch_page(&link);
-        for link in web_page_format::soup_to_links(&page, &link) {
-            if !links_to_explore.contains(link.clone().borrow()){
-                links_to_explore.push(link.clone());
-            }
-            if !visited_nodes.contains(link.clone().borrow()){
-                visited_nodes.push_back(link.clone());
-            }
-            nodes.push_back(web_page_format::soup_page_formatter(&page, last_node, link.clone().to_string()));
 
-            last_node=link;
-        }
-
-        if counter == depth {
-            file_management::save_file_sweep(nodes);
+    while let Some((page_url, last_page)) = links_todo.pop() {
+        if current_depth >= depth {
             break
-
         }
-        counter+=1;
-    }
-    println!("Visted all_nodes");
-    println!("Nodes visited:{}",visited_nodes.len())
+        current_depth += 1;
+        let page= fetch::fetch_page(&page_url);
+        let links= web_page_format::soup_to_links(&page, &*page_url);
 
+        nodes.push(web_page_format::soup_page_formatter(&page, last_page.to_string(), &page_url));
+        for link in links {
+            if !links_done.contains(&link){
+                links_done.insert(link.clone());
+                links_todo.push((link, page_url.clone()));
+            }
+        }
+    }
+    file_management::save_file_sweep(nodes);
 }
 
 fn main() {
 
     let settings = file_management::load_config();
-    search_space(&settings.start_site, settings.sweep_depth);
+    search_space(settings.start_site, settings.sweep_depth);
 
 }
