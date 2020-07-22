@@ -6,7 +6,6 @@ use std::time::SystemTime;
 use std::fs::File;
 use std::fs;
 use std::io::{Write};
-use std::collections::LinkedList;
 
 use yaml_rust::YamlLoader;
 use crate::web_page_format::Page;
@@ -14,7 +13,7 @@ use crate::web_page_format::Page;
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct SweepInfo {
     date:i64,
-    sites: LinkedList<Page>
+    sites: Vec<Page>
 }
 
 pub struct Settings{
@@ -34,7 +33,7 @@ pub fn load_config()->Settings{
 }
 
 
-pub fn save_file_sweep(sites:LinkedList<Page>){
+pub fn save_file_sweep(sites:Vec<Page>){
 
     File::create("sites.yaml").expect("Failed to create file");
     let epoch_time:i64;
