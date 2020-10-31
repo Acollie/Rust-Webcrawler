@@ -3,11 +3,8 @@
 This is a web crawler written in rust. 
 It visits sites and compiles a list of links. The aim being for them to be indexed as part of a search engine.
 
-# To implement
 
 
-### Ingestion engine
-A system to be able to evaluate the usefulness of pages.
 #### Parameters
 - Page title
 - Hits (pages linking)
@@ -15,20 +12,16 @@ A system to be able to evaluate the usefulness of pages.
 
 Possible structure for a site on fixing cars.
 
-|Word|Syntax|
+|Word|hits|
 |----|----|
 |Cars|31|
 |fix|10|
 |self|2|
 
-Remove similar pages.
 
---- 
-### Configuration file
-A file which allows for the user to settings before start.
 
 ---
-
+## To implement
 ### Database Integration
 Allowing after a sweep for the data to be added to database.
 With configuration file, for MYSQL, with Postgres support later.

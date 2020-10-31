@@ -21,15 +21,24 @@ pub fn soup_to_links(soup:&Soup,base_url:&str) -> Vec<String> {
     let all_links= soup.tag("a").find_all();
 
     for link in all_links{
+
         if !link.display().contains(":href")&& !link.display().contains("mailto") {
+
             if !link.get("href").is_none() {
+
                 let tmp_link = link.get("href").expect("Error Parsing");
+
                 if !tmp_link.contains("#") {
+
                     if tmp_link.contains("http://") || tmp_link.contains("https://") {
+
                         links.push(tmp_link);
+
                     } else {
+
                         let url = Url::parse(base_url).expect("");
                         links.push(url.join(&tmp_link).unwrap().to_string());
+
                     }
                 }
             }

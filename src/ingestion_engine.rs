@@ -94,6 +94,9 @@ fn words()->HashSet<String>{
         "an".to_string().to_uppercase(),
         "you".to_string().to_uppercase(),
         "you".to_string().to_uppercase(),
+        "around".to_string().to_uppercase(),
+        "would".to_string().to_uppercase(),
+        "this".to_string().to_uppercase(),
 
     ];
     return HashSet::from_iter(words);
