@@ -45,7 +45,7 @@ pub fn save_file_sweep(sites:Vec<Page>){
     }
     let sweep= SweepInfo {
         date: epoch_time,
-        sites: sites
+        sites
     };
     let format_sweep = serde_yaml::to_string(&sweep).unwrap();
 

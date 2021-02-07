@@ -43,8 +43,6 @@ pub fn soup_to_links(soup:&Soup,base_url:&str) -> Vec<String> {
                 }
             }
         }
-
-
     }
     return links;
 }

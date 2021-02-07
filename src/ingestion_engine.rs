@@ -32,7 +32,6 @@ pub fn words_from_soup(soup:&Soup)->Site{
 
             let word=remove_format(&word.to_string());
             let mut words=words();
-            // if word!="" && word !="\n"{
 
             if !words.contains(&word.to_string().to_uppercase()) && word !="" && word != "\n" && word !=" "{
 

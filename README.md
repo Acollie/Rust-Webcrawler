@@ -19,13 +19,3 @@ Possible structure for a site on fixing cars.
 |self|2|
 
 
-
----
-## To implement
-### Database Integration
-
-Allowing after a sweep for the data to be added to database.
-With configuration file, for MYSQL, with Postgres support later.
----
-### Multithreaded
-Create allow for the program to be able to run on multiple threads in CPU allows.

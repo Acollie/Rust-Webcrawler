@@ -15,30 +15,6 @@ mod ingestion_engine;
 use std::collections::HashSet;
 
 
-// fn search_space_recursive(page_url: &str, last_page: &str, depth: i32, nodes: &mut Vec<Page>, links_done: &mut HashSet<String>) {
-//     let page= fetch::fetch_page(&page_url);
-//     let links= web_page_format::soup_to_links(&page,page_url);
-//
-//     nodes.push(web_page_format::soup_page_formatter(&page, last_page, page_url));
-//     if depth > 0 {
-//         for link in links {
-//             if !links_done.contains(&link){
-//                 links_done.insert(link.clone());
-//                 search_space_recursive(&link, page_url,depth - 1, nodes, links_done);
-//             }
-//         }
-//     }
-// }
-//
-// fn search_space_using_recursion(first_item:String,depth:i32 ){
-//     let mut links_todo=Vec::new();
-//     let mut links_done:HashSet<String>=HashSet::new();
-//     let mut nodes=Vec::new();
-//     search_space_recursive(first_item, String::from("START_NODE"), &mut nodes, &mut links_done);
-//
-//     file_management::save_file_sweep(nodes);
-// }
-
 fn search_space(first_item:String,depth:i32 ){
     let mut links_todo=Vec::new();
     let mut links_done:HashSet<String>=HashSet::new();
