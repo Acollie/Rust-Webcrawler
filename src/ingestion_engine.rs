@@ -2,6 +2,7 @@ use soup::{Soup, QueryBuilderExt, NodeExt};
 use std::collections::HashSet;
 use std::iter::FromIterator;
 
+
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Site{
     pub title:String,
@@ -21,47 +22,46 @@ pub enum WebsiteTypes{
 }
 
 pub fn words_from_soup(soup:&Soup)->Site{
-
+    let mut found_words:HashSet<String> = HashSet::new();
     let body_text=soup.tag("body").find_all();
     let mut site= Site{
         title: soup.tag("title").find().unwrap().text(),
         words: Default::default()
     };
-    for x in body_text{
-        for word in x.text().split(" "){
+    for body in body_text{
+        for word in body.text().split(" "){
 
             let word=remove_format(&word.to_string());
-            let mut words=words();
-
-            if !words.contains(&word.to_string().to_uppercase()) && word !="" && word != "\n" && word !=" "{
-
-                let mut current_word = Word {
-                    word: word.clone(),
-                    hits: 1
-                };
-                let tmp=word.clone();
-                words.insert(word);
-
-                for test_word in x.text().split(" "){
-                     if tmp== test_word{
-                        current_word.hits+=1;
+            let common_words = words();
+            if !common_words.contains(&word.to_uppercase()) && !word.contains(" ") || !word.contains("") && word != ""{
+                if found_words.contains(&*word){
+                    for mut search_word in &mut site.words{
+                        if search_word.word == word{
+                            search_word.hits += 1;
+                        }
                     }
+                } else {
+                    let current_word = Word {
+                        word: word.clone(),
+                        hits: 1
+                    };
+                    site.words.push(current_word);
+                    found_words.insert(word.clone());
                 }
-                site.words.push(current_word);
-
             }
         }
     }
-
     site.words.sort_by(|a,b| b.hits.cmp(&a.hits));
-
     return site;
 }
+
+
+
 fn remove_format(word:&String)->String{
-    let word=word.replace("\n","");
-    let word=word.replace(",","");
-    let word=word.replace(".","");
-    let word=word.replace(" ","");
+    let word=word.replace("\n"," ");
+    let word=word.replace(","," ");
+    let word=word.replace("."," ");
+    let word=word.replace(" "," ");
     return word
 }
 
@@ -92,7 +92,7 @@ fn words()->HashSet<String>{
         "might".to_string().to_uppercase(),
         "an".to_string().to_uppercase(),
         "you".to_string().to_uppercase(),
-        "you".to_string().to_uppercase(),
+        "were".to_string().to_uppercase(),
         "around".to_string().to_uppercase(),
         "would".to_string().to_uppercase(),
         "this".to_string().to_uppercase(),
